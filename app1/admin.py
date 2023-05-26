@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import User, Patient, Doctor,DiabetesDetection,GestationalDiabetes
+from .models import User, Patient, Doctor, DiabetesDetection, GestationalDiabetes
+
 # Register your models here.
 
 admin.site.register(User)

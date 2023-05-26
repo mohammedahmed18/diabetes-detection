@@ -4,28 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app1', '0001_initial'),
+        ("app1", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='patient',
-            old_name='bioodgroup',
-            new_name='password',
+            model_name="patient",
+            old_name="bioodgroup",
+            new_name="password",
         ),
         migrations.RemoveField(
-            model_name='doctor',
-            name='address',
+            model_name="doctor",
+            name="address",
         ),
         migrations.RemoveField(
-            model_name='patient',
-            name='address',
+            model_name="patient",
+            name="address",
         ),
         migrations.AddField(
-            model_name='doctor',
-            name='password',
+            model_name="doctor",
+            name="password",
             field=models.CharField(default=123, max_length=50),
             preserve_default=False,
         ),

@@ -4,46 +4,45 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('app1', '0002_auto_20230525_0131'),
+        ("app1", "0002_auto_20230525_0131"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='diabetesdetection',
-            name='Date',
+            model_name="diabetesdetection",
+            name="Date",
         ),
         migrations.RemoveField(
-            model_name='diabetesdetection',
-            name='Hight',
+            model_name="diabetesdetection",
+            name="Hight",
         ),
         migrations.RemoveField(
-            model_name='diabetesdetection',
-            name='Name',
+            model_name="diabetesdetection",
+            name="Name",
         ),
         migrations.RemoveField(
-            model_name='doctor',
-            name='password',
+            model_name="doctor",
+            name="password",
         ),
         migrations.RemoveField(
-            model_name='gestationaldiabetes',
-            name='Date',
+            model_name="gestationaldiabetes",
+            name="Date",
         ),
         migrations.RemoveField(
-            model_name='gestationaldiabetes',
-            name='Hight',
+            model_name="gestationaldiabetes",
+            name="Hight",
         ),
         migrations.RemoveField(
-            model_name='gestationaldiabetes',
-            name='Name',
+            model_name="gestationaldiabetes",
+            name="Name",
         ),
         migrations.RemoveField(
-            model_name='gestationaldiabetes',
-            name='Weight',
+            model_name="gestationaldiabetes",
+            name="Weight",
         ),
         migrations.RemoveField(
-            model_name='patient',
-            name='password',
+            model_name="patient",
+            name="password",
         ),
     ]

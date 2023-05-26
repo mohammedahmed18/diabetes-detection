@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Patient, Doctor,DiabetesDetection,GestationalDiabetes
+from .models import User, Patient, Doctor, DiabetesDetection, GestationalDiabetes
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
@@ -10,20 +10,19 @@ class PatientSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ('username', 'email',
-                   'password','phone')
+        fields = ("username", "email", "password", "phone")
 
     def create(self, validated_data):
-        username = validated_data.pop('username')
-        email = validated_data['email']
-        password = validated_data.pop('password')
+        username = validated_data.pop("username")
+        email = validated_data["email"]
+        password = validated_data.pop("password")
         user = User(username=username, email=email, is_patient=True)
         user.set_password(password)
         user.save()
 
-        validated_data['user'] = user
+        validated_data["user"] = user
         patient = super(PatientSignupSerializer, self).create(validated_data)
-        print('PPPPPPPPPPPp', patient)
+        print("PPPPPPPPPPPp", patient)
         return patient
 
 
@@ -33,50 +32,46 @@ class DoctorSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Doctor
-        fields = ('username', 'email',
-                   'password','phone')
+        fields = ("username", "email", "password", "phone")
 
     def create(self, validated_data):
-        username = validated_data.pop('username')
-        email = validated_data['email']
-        password = validated_data.pop('password')
-        phone = validated_data['phone']
+        username = validated_data.pop("username")
+        email = validated_data["email"]
+        password = validated_data.pop("password")
+        phone = validated_data["phone"]
         user = User(username=username, email=email, is_doctor=True)
         user.set_password(password)
         user.save()
-        validated_data['user'] = user
+        validated_data["user"] = user
         doctor = super(DoctorSignupSerializer, self).create(validated_data)
         return doctor
 
 
 class LoginSerializer(serializers.ModelSerializer):
-
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ["username", "password"]
 
     def validate(self, attrs):
-        username = attrs.get('username')
-        password = attrs.get('password')
+        username = attrs.get("username")
+        password = attrs.get("password")
         if username and password:
-            user = authenticate(request=self.context.get('request'),
-                                username=username, password=password)
+            user = authenticate(
+                request=self.context.get("request"),
+                username=username,
+                password=password,
+            )
             if not user:
-                msg = 'Access denied: wrong username or password.'
-                raise serializers.ValidationError(msg, code='authorization')
+                msg = "Access denied: wrong username or password."
+                raise serializers.ValidationError(msg, code="authorization")
         else:
             msg = 'Both "username" and "password" are required.'
-            raise serializers.ValidationError(msg, code='authorization')
-        attrs['user'] = user
+            raise serializers.ValidationError(msg, code="authorization")
+        attrs["user"] = user
         return attrs
-
-
-
-
-
 
 
 from rest_framework import serializers
@@ -85,8 +80,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
-User = get_user_model()
 
+User = get_user_model()
 
 
 class EmailSerializer(serializers.Serializer):
@@ -100,7 +95,6 @@ class EmailSerializer(serializers.Serializer):
         fields = ("email",)
 
 
-
 class ResetPasswordSerializer(serializers.Serializer):
     """
     Reset Password Serializer.
@@ -112,7 +106,7 @@ class ResetPasswordSerializer(serializers.Serializer):
     )
 
     class Meta:
-        field = ("password")
+        field = "password"
 
     def validate(self, data):
         """
@@ -132,25 +126,36 @@ class ResetPasswordSerializer(serializers.Serializer):
 
         user.set_password(password)
         user.save()
-        return data        
+        return data
 
 
-
-
-
-#=======================================Patient==============================================================
-#DiabetesDetection
+# =======================================Patient==============================================================
+# DiabetesDetection
 class DiabetesDetectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiabetesDetection
-        fields = ( 'Age','Gender','Cholesterol','Glucose','Hdl_CholL','Systolic_BP','Diastolic_BP') 
-
-
-
+        fields = (
+            "age",
+            "gender",
+            "cholesterol",
+            "glucose",
+            "hdl_choll",
+            "systolic_bp",
+            "diastolic_bp",
+        )
 
 
 class GestationalDiabetesSerializer(serializers.ModelSerializer):
     class Meta:
         model = GestationalDiabetes
-        fields = ('Weight','Number_Of_Pregnancies', 'Age','Bmi','BP_level','Glucose','Insulin','Skin_Thickness','Diabetes_Pedigree') 
-       
+        fields = (
+            "number_of_pregnancies",
+            "age",
+            "bmi",
+            "bp_level",
+            "glucose",
+            "insulin",
+            "skin_thickness",
+            "diabetes_pedigree",
+        )
+

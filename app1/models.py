@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from rest_framework.authtoken.models import Token
+
 # Create your models here.
 
 
@@ -14,11 +15,8 @@ class User(AbstractUser):
     is_doctor = models.BooleanField(default=False)
 
 
-
-
 class Patient(models.Model):
-    user = models.OneToOneField(
-        User, related_name="Patient", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name="Patient", on_delete=models.CASCADE)
     patient_name = models.CharField(max_length=150)
     age = models.IntegerField(null=True)
     phone = models.IntegerField()
@@ -30,56 +28,44 @@ class Patient(models.Model):
         return self.user.username
 
 
-
-
 class Doctor(models.Model):
-    user = models.OneToOneField(
-        User, related_name="Doctor", on_delete=models.CASCADE)
-    id= models.IntegerField(primary_key=True)   
+    user = models.OneToOneField(User, related_name="Doctor", on_delete=models.CASCADE)
+    id = models.IntegerField(primary_key=True)
     Doctor_name = models.CharField(max_length=150)
     phone = models.IntegerField()
     email = models.EmailField(max_length=150)
     gender = models.CharField(max_length=50)
-    patients = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True)
+    patients = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
 
     def _str_(self) -> str:
         return self.user.username
 
 
-
-
-
-#============================================ Patient===========================================
-#DiabetesDetection
+# ============================================ Patient===========================================
+# DiabetesDetection
 class DiabetesDetection(models.Model):
-    Weight=models.FloatField()
-    Age=models.IntegerField()
-    Gender=models.CharField(max_length=50)
-    Cholesterol=models.FloatField()
-    Glucose=models.FloatField()
-    Hdl_CholL=models.FloatField()
-    Systolic_BP=models.FloatField()
-    Diastolic_BP=models.FloatField()
+    weight = models.FloatField()
+    age = models.IntegerField()
+    gender = models.CharField(max_length=50)
+    cholesterol = models.FloatField()
+    glucose = models.FloatField()
+    hdl_choll = models.FloatField()
+    systolic_bp = models.FloatField()
+    diastolic_bp = models.FloatField()
 
     def _str_(self) -> str:
-        return self. Weight
-
+        return self.Weight
 
 
 class GestationalDiabetes(models.Model):
-    Number_Of_Pregnancies=models.IntegerField()
-    Age=models.IntegerField()
-    Bmi=models.FloatField()
-    BP_level=models.FloatField()
-    Glucose=models.FloatField()
-    Insulin=models.FloatField()
-    Skin_Thickness=models.FloatField()
-    Diabetes_Pedigree=models.FloatField()
+    number_of_pregnancies = models.IntegerField()
+    age = models.IntegerField()
+    bmi = models.FloatField()
+    bp_level = models.FloatField()
+    glucose = models.FloatField()
+    insulin = models.FloatField()
+    skin_thickness = models.FloatField()
+    diabetes_pedigree = models.FloatField()
 
     def _str_(self) -> str:
-        return self.Number_Of_Pregnancies
-
-
-
-
-
+        return self.number_of_pregnancies

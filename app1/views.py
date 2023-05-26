@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
-from .serializers import PatientSignupSerializer, DoctorSignupSerializer, LoginSerializer,DiabetesDetectionSerializer,GestationalDiabetesSerializer
+from .serializers import *
 from .models import Patient, Doctor, User
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from rest_framework import views
+
 # Create your views here.
 
 
@@ -17,18 +18,19 @@ class PatientSignupView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user = User.objects.get(username=request.data.get('username'))
+        user = User.objects.get(username=request.data.get("username"))
         token_obj, _ = Token.objects.get_or_create(user=user)
-        return Response({
-            "username": user.username,
-            "email": user.email,
-            "password": user.password,
-            "phone": user.Patient.phone,
-
-            # "user": user.username,
-            # "token": token_obj.key,
-            # "message": "account created successfully"
-        })
+        return Response(
+            {
+                "username": user.username,
+                "email": user.email,
+                "password": user.password,
+                "phone": user.Patient.phone,
+                # "user": user.username,
+                # "token": token_obj.key,
+                # "message": "account created successfully"
+            }
+        )
 
 
 class DoctorSignupView(generics.GenericAPIView):
@@ -38,18 +40,19 @@ class DoctorSignupView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        user = User.objects.get(username=request.data.get('username'))
+        user = User.objects.get(username=request.data.get("username"))
         token_obj, _ = Token.objects.get_or_create(user=user)
-        return Response({
-            # "user": user.username,
-            "username": user.username,
-            "email": user.email,
-            "password": user.password,
-            "phone": user.Doctor.phone,
-
-            # "token": token_obj.key,
-            # "message": "account created successfully"
-        })
+        return Response(
+            {
+                # "user": user.username,
+                "username": user.username,
+                "email": user.email,
+                "password": user.password,
+                "phone": user.Doctor.phone,
+                # "token": token_obj.key,
+                # "message": "account created successfully"
+            }
+        )
 
 
 class LoginView(generics.GenericAPIView):
@@ -58,18 +61,20 @@ class LoginView(generics.GenericAPIView):
     def post(self, request, format=None):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+        user = serializer.validated_data["user"]
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
 
-            return Response({'token': token.key, })
+            return Response(
+                {
+                    "token": token.key,
+                }
+            )
         else:
-            return Response({'errors': {'non_field_errors': ['Email or Password is not Valid']}})
-
-
-
-
+            return Response(
+                {"errors": {"non_field_errors": ["Email or Password is not Valid"]}}
+            )
 
 
 from rest_framework import generics, status, viewsets, response
@@ -81,6 +86,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 from . import serializers
@@ -113,10 +119,7 @@ class PasswordReset(generics.GenericAPIView):
             # send the rest_link as mail to the user.
 
             return response.Response(
-                {
-                    "message": 
-                    f"Your password rest link: {reset_link}"
-                },
+                {"message": f"Your password rest link: {reset_link}"},
                 status=status.HTTP_200_OK,
             )
         else:
@@ -147,34 +150,35 @@ class ResetPasswordAPI(generics.GenericAPIView):
         )
 
 
-
-
-
-
-#=====================================Patient===================================================================
-#DiabetesDetection
+# =====================================Patient===================================================================
+# DiabetesDetection
 class DiabetesDetectionView(generics.GenericAPIView):
     serializer_class = DiabetesDetectionSerializer
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user=serializer.save()    
-        return Response({
-        "DiabetesDetection":DiabetesDetectionSerializer(user, context=self.get_serializer_context()).data,
-        })
-
-
-
-
-
+        user = serializer.save()
+        return Response(
+            {
+                "DiabetesDetection": DiabetesDetectionSerializer(
+                    user, context=self.get_serializer_context()
+                ).data,
+            }
+        )
 
 
 class GestationalDiabetesView(generics.GenericAPIView):
-    serializer_class =GestationalDiabetesSerializer
+    serializer_class = GestationalDiabetesSerializer
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user=serializer.save()    
-        return Response({
-        "Gestational Diabetes":GestationalDiabetesSerializer(user, context=self.get_serializer_context()).data,
-        })        
+        user = serializer.save()
+        return Response(
+            {
+                "Gestational Diabetes": GestationalDiabetesSerializer(
+                    user, context=self.get_serializer_context()
+                ).data,
+            }
+        )
