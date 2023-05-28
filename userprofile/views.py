@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import status
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
@@ -8,9 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from app1.models import Patient, Doctor
 
-# from userprofile.models import PaitentProfile,DoctorProfile
-from app1.models import User
-
+# Create your views here.
 
 class UserProfileView(RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
