@@ -1,13 +1,14 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from app1.models import Patient, Doctor
+from rest_framework.views import APIView
 
 # Create your views here.
 
-class UserProfileView(RetrieveAPIView):
+
+class UserProfileView(APIView):
     permission_classes = (IsAuthenticated,)
     authentication_class = TokenAuthentication
 
@@ -22,7 +23,7 @@ class UserProfileView(RetrieveAPIView):
                     "message": "Paitent profile fetched successfully",
                     "data": [
                         {
-                            # 'username': user_profile.username,
+                            "username": user_profile.username,
                             "email": user_profile.email,
                             "phone": user_profile.phone,
                         }
@@ -37,7 +38,7 @@ class UserProfileView(RetrieveAPIView):
                     "message": "Doctor profile fetched successfully",
                     "data": [
                         {
-                            # 'username': user_profile.username,
+                            "username": user_profile.username,
                             "email": user_profile.email,
                             "phone": user_profile.phone,
                         }

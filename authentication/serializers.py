@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from app1.models import User
 from app1.models import Patient, Doctor
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -7,10 +7,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
+from rest_framework.validators import UniqueValidator
+from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
+
+
 class PatientSignupSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(write_only=True)
+    username = serializers.CharField(
+        write_only=True, validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -27,12 +36,16 @@ class PatientSignupSerializer(serializers.ModelSerializer):
 
         validated_data["user"] = user
         patient = super(PatientSignupSerializer, self).create(validated_data)
-        print("PPPPPPPPPPPp", patient)
         return patient
 
 
 class DoctorSignupSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(write_only=True)
+    username = serializers.CharField(
+        write_only=True, validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -43,7 +56,6 @@ class DoctorSignupSerializer(serializers.ModelSerializer):
         username = validated_data.pop("username")
         email = validated_data["email"]
         password = validated_data.pop("password")
-        phone = validated_data["phone"]
         user = User(username=username, email=email, is_doctor=True)
         user.set_password(password)
         user.save()
@@ -77,6 +89,7 @@ class LoginSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(msg, code="authorization")
         attrs["user"] = user
         return attrs
+
 
 class EmailSerializer(serializers.Serializer):
     """

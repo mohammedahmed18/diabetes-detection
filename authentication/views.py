@@ -8,11 +8,13 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework.response import Response
 from .serializers import *
-from .models import User
+from app1.models import User
 from rest_framework.authtoken.models import Token
+
 # Create your views here.
 
 User = get_user_model()
+
 
 class PatientSignupView(generics.GenericAPIView):
     serializer_class = PatientSignupSerializer
@@ -22,17 +24,16 @@ class PatientSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user = User.objects.get(username=request.data.get("username"))
-        token_obj, _ = Token.objects.get_or_create(user=user)
+        print(user)
+        # token_obj, _ = Token.objects.get_or_create(user=user)
         return Response(
             {
                 "username": user.username,
                 "email": user.email,
-                "password": user.password,
-                "phone": user.Patient.phone,
-                # "user": user.username,
-                # "token": token_obj.key,
-                # "message": "account created successfully"
-            }
+                "phone": user.patient.phone,
+                "message": "account created successfully",
+            },
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -44,17 +45,16 @@ class DoctorSignupView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user = User.objects.get(username=request.data.get("username"))
-        token_obj, _ = Token.objects.get_or_create(user=user)
+        print(user)
+        # token_obj, _ = Token.objects.get_or_create(user=user)
         return Response(
             {
-                # "user": user.username,
                 "username": user.username,
                 "email": user.email,
-                "password": user.password,
-                "phone": user.Doctor.phone,
-                # "token": token_obj.key,
-                # "message": "account created successfully"
-            }
+                "phone": user.doctor.phone,
+                "message": "account created successfully",
+            },
+            status=status.HTTP_201_CREATED,
         )
 
 
@@ -72,18 +72,22 @@ class LoginView(generics.GenericAPIView):
             return Response(
                 {
                     "token": token.key,
-                }
+                },
+                status=status.HTTP_200_OK,
             )
         else:
             return Response(
-                {"errors": {"non_field_errors": ["Email or Password is not Valid"]}}
+                {"errors": {"non_field_errors": ["Email or Password is not Valid"]}},
+                status=status.HTTP_400_BAD_REQUEST,
             )
+
+
 class PasswordReset(generics.GenericAPIView):
     """
     Request for Password Reset Link.
     """
 
-    serializer_class = serializers.EmailSerializer
+    serializer_class = EmailSerializer
 
     def post(self, request):
         """
@@ -120,7 +124,7 @@ class ResetPasswordAPI(generics.GenericAPIView):
     Verify and Reset Password Token View.
     """
 
-    serializer_class = serializers.ResetPasswordSerializer
+    serializer_class = ResetPasswordSerializer
 
     def patch(self, request, *args, **kwargs):
         """

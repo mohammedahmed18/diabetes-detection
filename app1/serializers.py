@@ -1,11 +1,17 @@
 from rest_framework import serializers
-from .models import  DiabetesDetection, GestationalDiabetes
+from .models import *
+
 
 # DiabetesDetection
-class DiabetesDetectionSerializer(serializers.ModelSerializer):
+class DiabetesDetectionPatientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DiabetesDetection
+        model = DiabetesDetectionPatient
         fields = (
+            "type",
+            "date",
+            "height",
+            "phone",
+            "weight",
             "age",
             "gender",
             "cholesterol",
@@ -13,13 +19,40 @@ class DiabetesDetectionSerializer(serializers.ModelSerializer):
             "hdl_choll",
             "systolic_bp",
             "diastolic_bp",
+            "result",
         )
 
 
-class GestationalDiabetesSerializer(serializers.ModelSerializer):
+class DiabetesDetectionDoctorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GestationalDiabetes
+        model = DiabetesDetectionDoctor
         fields = (
+            "type",
+            "date",
+            "patient_name",
+            "height",
+            "phone",
+            "weight",
+            "age",
+            "gender",
+            "cholesterol",
+            "glucose",
+            "hdl_choll",
+            "systolic_bp",
+            "diastolic_bp",
+            "result",
+        )
+
+
+class GestationalDiabetesPatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GestationalDiabetesPatient
+        fields = (
+            "type",
+            "date",
+            "height",
+            "weight",
+            "phone",
             "number_of_pregnancies",
             "age",
             "bmi",
@@ -28,5 +61,27 @@ class GestationalDiabetesSerializer(serializers.ModelSerializer):
             "insulin",
             "skin_thickness",
             "diabetes_pedigree",
+            "result",
         )
 
+
+class GestationalDiabetesDoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GestationalDiabetesDoctor
+        fields = (
+            "type",
+            "date",
+            "patient_name",
+            "height",
+            "weight",
+            "phone",
+            "number_of_pregnancies",
+            "age",
+            "bmi",
+            "bp_level",
+            "glucose",
+            "insulin",
+            "skin_thickness",
+            "diabetes_pedigree",
+            "result",
+        )

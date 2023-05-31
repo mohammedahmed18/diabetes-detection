@@ -1,5 +1,7 @@
+import pytz
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 # Create your models here.
 
@@ -8,51 +10,89 @@ class User(AbstractUser):
     is_patient = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
 
+    # @property
+    # def patient(self):
+    #     if hasattr(self, "_cached_patient"):
+    #         return self._cached_patient
+    #     try:
+    #         self._cached_patient = self.patient
+    #         return self._cached_patient
+    #     except Patient.DoesNotExist:
+    #         return None
+
+    # @property
+    # def doctor(self):
+    #     if hasattr(self, "_cached_doctor"):
+    #         return self._cached_doctor
+    #     try:
+    #         self._cached_doctor = self.doctor
+    #         return self._cached_doctor
+    #     except Doctor.DoesNotExist:
+    #         return None
+
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, related_name="Patient", on_delete=models.CASCADE)
-    patient_name = models.CharField(max_length=150)
+    user = models.OneToOneField(User, related_name="patient", on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
     age = models.IntegerField(null=True)
     phone = models.IntegerField()
     email = models.EmailField(max_length=150)
-    gender = models.CharField(max_length=50)
-    # doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=6)
 
     def _str_(self) -> str:
         return self.user.username
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, related_name="Doctor", on_delete=models.CASCADE)
-    id = models.IntegerField(primary_key=True)
-    Doctor_name = models.CharField(max_length=150)
+    user = models.OneToOneField(User, related_name="doctor", on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
     phone = models.IntegerField()
     email = models.EmailField(max_length=150)
-    gender = models.CharField(max_length=50)
-    patients = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
+    gender = models.CharField(max_length=6)
 
     def _str_(self) -> str:
         return self.user.username
 
 
-# ============================================ Patient===========================================
-# DiabetesDetection
 class DiabetesDetection(models.Model):
+    type = models.CharField(default="Diabetes Detection", max_length=150, null=True)
     weight = models.FloatField()
+    height = models.FloatField()
+    phone = models.FloatField()
     age = models.IntegerField()
-    gender = models.CharField(max_length=50)
+    gender = models.CharField(max_length=6)
     cholesterol = models.FloatField()
     glucose = models.FloatField()
     hdl_choll = models.FloatField()
     systolic_bp = models.FloatField()
     diastolic_bp = models.FloatField()
+    result = models.CharField(null=True, blank=True, max_length=100)
+    date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def _str_(self) -> str:
         return self.Weight
 
+    class Meta:
+        abstract = True
+
+
+class DiabetesDetectionPatient(DiabetesDetection):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+
+class DiabetesDetectionDoctor(DiabetesDetection):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient_name = models.CharField(max_length=150)
+
 
 class GestationalDiabetes(models.Model):
+    type = models.CharField(
+        default="Gestational Diabetes Detection", max_length=150, null=True
+    )
     number_of_pregnancies = models.IntegerField()
+    weight = models.FloatField()
+    height = models.FloatField()
+    phone = models.FloatField()
     age = models.IntegerField()
     bmi = models.FloatField()
     bp_level = models.FloatField()
@@ -60,6 +100,20 @@ class GestationalDiabetes(models.Model):
     insulin = models.FloatField()
     skin_thickness = models.FloatField()
     diabetes_pedigree = models.FloatField()
+    result = models.CharField(null=True, blank=True, max_length=100)
+    date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def _str_(self) -> str:
-        return self.number_of_pregnancies
+        return self.Weight
+
+    class Meta:
+        abstract = True
+
+
+class GestationalDiabetesPatient(GestationalDiabetes):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+
+class GestationalDiabetesDoctor(GestationalDiabetes):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient_name = models.CharField(max_length=150)
