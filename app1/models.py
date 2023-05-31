@@ -10,26 +10,6 @@ class User(AbstractUser):
     is_patient = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
 
-    # @property
-    # def patient(self):
-    #     if hasattr(self, "_cached_patient"):
-    #         return self._cached_patient
-    #     try:
-    #         self._cached_patient = self.patient
-    #         return self._cached_patient
-    #     except Patient.DoesNotExist:
-    #         return None
-
-    # @property
-    # def doctor(self):
-    #     if hasattr(self, "_cached_doctor"):
-    #         return self._cached_doctor
-    #     try:
-    #         self._cached_doctor = self.doctor
-    #         return self._cached_doctor
-    #     except Doctor.DoesNotExist:
-    #         return None
-
 
 class Patient(models.Model):
     user = models.OneToOneField(User, related_name="patient", on_delete=models.CASCADE)

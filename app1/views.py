@@ -18,7 +18,7 @@ class DiabetesDetectionPatientView(generics.GenericAPIView):
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 detection = serializer.save(patient=request.user.patient)
-                detection.result = "khedr"
+                detection.result = "to be calculated"
                 detection.save()
                 return Response(
                     DiabetesDetectionPatientSerializer(
@@ -40,7 +40,7 @@ class GestationalDiabetesPatientView(generics.GenericAPIView):
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 detection = serializer.save(patient=request.user.patient)
-                detection.result = "khedr"
+                detection.result = "to be calculated"
                 detection.save()
                 return Response(
                     GestationalDiabetesPatientSerializer(
@@ -62,7 +62,7 @@ class DiabetesDetectionDoctorView(generics.GenericAPIView):
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 detection = serializer.save(doctor=request.user.doctor)
-                detection.result = "khedr"
+                detection.result = "to be calculated"
                 detection.save()
                 return Response(
                     DiabetesDetectionDoctorSerializer(
@@ -84,7 +84,7 @@ class GestationalDiabetesDoctorView(generics.GenericAPIView):
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 detection = serializer.save(doctor=request.user.doctor)
-                detection.result = "khedr"
+                detection.result = "to be calculated"
                 detection.save()
                 return Response(
                     GestationalDiabetesDoctorSerializer(
@@ -111,7 +111,9 @@ class PatientHistoryView(APIView):
                 detections_list = list(
                     chain(diabetes_detections, gestational_detections)
                 )
-                ordered_detections = sorted(detections_list, key=lambda x: x.date, reverse=True)
+                ordered_detections = sorted(
+                    detections_list, key=lambda x: x.date, reverse=True
+                )
                 serialized_detections = []
                 for detection in ordered_detections:
                     if isinstance(detection, DiabetesDetectionPatient):
@@ -145,7 +147,9 @@ class DoctorHistoryView(APIView):
                 detections_list = list(
                     chain(diabetes_detections, gestational_detections)
                 )
-                ordered_detections = sorted(detections_list, key=lambda x: x.date, reverse =True)
+                ordered_detections = sorted(
+                    detections_list, key=lambda x: x.date, reverse=True
+                )
                 serialized_detections = []
                 for detection in ordered_detections:
                     if isinstance(detection, DiabetesDetectionDoctor):

@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import *
 
 
-# DiabetesDetection
 class DiabetesDetectionPatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiabetesDetectionPatient
