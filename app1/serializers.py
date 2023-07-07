@@ -1,6 +1,17 @@
 from rest_framework import serializers
 from .models import *
 
+class PatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ("name", "phone", "email")
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = ("name", "phone", "email")
+
 
 class DiabetesDetectionPatientSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,5 +93,26 @@ class GestationalDiabetesDoctorSerializer(serializers.ModelSerializer):
             "insulin",
             "skin_thickness",
             "diabetes_pedigree",
+            "result",
+        )
+
+
+class RetinopathyDetectionPatientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RetinopathyDetectionPatient
+        fields = (
+            "type",
+            "date",
+            "result",
+        )
+
+
+class RetinopathyDetectionDoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RetinopathyDetectionDoctor
+        fields = (
+            "type",
+            "date",
+            "patient_name",
             "result",
         )

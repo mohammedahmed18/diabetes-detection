@@ -35,6 +35,7 @@ class PatientSignupSerializer(serializers.ModelSerializer):
         user.save()
 
         validated_data["user"] = user
+        validated_data["name"] = user.username
         patient = super(PatientSignupSerializer, self).create(validated_data)
         return patient
 
@@ -60,6 +61,7 @@ class DoctorSignupSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         validated_data["user"] = user
+        validated_data["name"] = user.username
         doctor = super(DoctorSignupSerializer, self).create(validated_data)
         return doctor
 

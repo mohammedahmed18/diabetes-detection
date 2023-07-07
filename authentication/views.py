@@ -30,8 +30,9 @@ class PatientSignupView(generics.GenericAPIView):
             {
                 "username": user.username,
                 "email": user.email,
+                "password":user.password,
                 "phone": user.patient.phone,
-                "message": "account created successfully",
+                # "message": "account created successfully",
             },
             status=status.HTTP_201_CREATED,
         )
@@ -51,8 +52,9 @@ class DoctorSignupView(generics.GenericAPIView):
             {
                 "username": user.username,
                 "email": user.email,
+                "password":user.password,
                 "phone": user.doctor.phone,
-                "message": "account created successfully",
+                # "message": "account created successfully",
             },
             status=status.HTTP_201_CREATED,
         )

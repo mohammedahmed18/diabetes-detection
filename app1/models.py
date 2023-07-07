@@ -46,7 +46,7 @@ class DiabetesDetection(models.Model):
     hdl_choll = models.FloatField()
     systolic_bp = models.FloatField()
     diastolic_bp = models.FloatField()
-    result = models.CharField(null=True, blank=True, max_length=100)
+    result = models.CharField(max_length=150)
     date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def _str_(self) -> str:
@@ -80,7 +80,7 @@ class GestationalDiabetes(models.Model):
     insulin = models.FloatField()
     skin_thickness = models.FloatField()
     diabetes_pedigree = models.FloatField()
-    result = models.CharField(null=True, blank=True, max_length=100)
+    result = models.CharField(max_length=150)
     date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
     def _str_(self) -> str:
@@ -95,5 +95,28 @@ class GestationalDiabetesPatient(GestationalDiabetes):
 
 
 class GestationalDiabetesDoctor(GestationalDiabetes):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient_name = models.CharField(max_length=150)
+
+
+class RetinopathyDetection(models.Model):
+    type = models.CharField(
+        default="Retinopathy Detection", max_length=150, null=True
+    )
+    result = models.CharField(max_length=150)
+    date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
+
+    def _str_(self) -> str:
+        return self.Weight
+
+    class Meta:
+        abstract = True
+
+
+class RetinopathyDetectionPatient(RetinopathyDetection):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+
+class RetinopathyDetectionDoctor(RetinopathyDetection):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient_name = models.CharField(max_length=150)
