@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-^^9xz^k+kd8mc@@!_r#5a%2pbg9e4esloo)l9%hbmf$fu40cl$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 AUTH_USER_MODEL = "app1.User"
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["diabetes-detection-emt5.onrender.com"]
 
 
 # Application definition
